@@ -1,0 +1,6 @@
+2026-02-18 22:22:22,068 - __main__ - INFO - Starting Firestore Only Integration Test...
+2026-02-18 22:22:22,069 - src.database - INFO - 使用憑證檔案初始化 Firestore: service-account.json (Database: mosodb)
+2026-02-18 22:22:22,130 - src.database - INFO - Firestore client initialized successfully. Database: mosodb, Collection: mosodb
+2026-02-18 22:22:22,130 - __main__ - INFO - Upserting product: test_mosodb_001
+2026-02-18 22:22:22,992 - src.database - INFO - 已更新/新增商品 test_mosodb_001 至 Firestore (mosodb)。
+2026-02-18 22:22:22,993 - __main__ - INFO - Upsert operation completed. Please check Firestore 'mosodb' collection.

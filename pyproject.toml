@@ -1,0 +1,14 @@
+[project]
+name = "costco-info"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "firebase-admin>=7.1.0",
+    "google-cloud-firestore>=2.23.0",
+    "google-cloud-storage>=3.9.0",
+    "pymongo>=4.16.0",
+    "requests>=2.32.5",
+]

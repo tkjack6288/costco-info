@@ -1,0 +1,53 @@
+Raw href in list: https://www.costco.com.tw/Continental/Continental-Tire/p/111844
+Target Product URL: https://www.costco.com.tw/Continental/Continental-Tire/p/111844
+Detail Page Title: 擐祉?頛芾? | Costco 憟賢?憭?
+
+--- Detail Page Analysis ---
+Scanning for large text blocks...
+Candidate Div: Class=['container', 'gdpr-message-container'], ID=None, TextLen=131
+Sample: ?箔?雿輻雯蝡迤撣賊?雿???雿輻?箸敹??ookies??典?????銝???雿輻?嗡???潛雯蝡...
+Candidate Div: Class=['col-md-10', 'col-sm-8', 'col-xs-12', 'gdpr-message-item_content'], ID=None, TextLen=119
+Sample: ?箔?雿輻雯蝡迤撣賊?雿???雿輻?箸敹??ookies??典?????銝???雿輻?嗡???潛雯蝡...
+Candidate Div: Class=['product-information', 'ng-star-inserted'], ID=None, TextLen=235
+Sample: ???寡蝡鞈潸眺*?芣??? 2026/01/19(銝)~2026/02/15(??*銝甈∟頃鞎瑕?摰???..
+Candidate Div: Class=['product-information-text'], ID=None, TextLen=231
+Sample: 蝡鞈潸眺*?芣??? 2026/01/19(銝)~2026/02/15(??*銝甈∟頃鞎瑕?摰????詨?閬?..
+Candidate Div: Class=None, ID=None, TextLen=342
+Sample: 敺瑕?擐祉?頛芾?隞乓ontinental-Caoutchouc- und Gutta-Percha C...
+Candidate Div: Class=['product-details-wrapper'], ID=None, TextLen=342
+Sample: 敺瑕?擐祉?頛芾?隞乓ontinental-Caoutchouc- und Gutta-Percha C...
+Candidate Div: Class=['pdp-tab-content-body', 'product-details-content-wrapper'], ID=None, TextLen=342
+Sample: 敺瑕?擐祉?頛芾?隞乓ontinental-Caoutchouc- und Gutta-Percha C...
+Candidate Div: Class=['delivery-info'], ID=None, TextLen=269
+Sample: ?憚?憚?????潸?鞈潭韏?0憭拙?潭???末撣?頛芾?銝剖?摰?????湔??摰??交?摰?鞈?嚗???..
+Candidate Div: Class=['delivery-desc'], ID=None, TextLen=267
+Sample: 頛芾?頛芾?????潸?鞈潭韏?0憭拙?潭???末撣?頛芾?銝剖?摰?????湔??摰??交?摰?鞈?嚗???瘨?..
+Candidate Div: Class=['container', 'gdpr-message-container'], ID=None, TextLen=131
+Sample: ?箔?雿輻雯蝡迤撣賊?雿???雿輻?箸敹??ookies??典?????銝???雿輻?嗡???潛雯蝡...
+Candidate Div: Class=['col-md-10', 'col-sm-8', 'col-xs-12', 'gdpr-message-item_content'], ID=None, TextLen=119
+Sample: ?箔?雿輻雯蝡迤撣賊?雿???雿輻?箸敹??ookies??典?????銝???雿輻?嗡???潛雯蝡...
+Candidate Div: Class=['copyrightext'], ID=None, TextLen=118
+Sample: 憌?璆剔???? A-196972798-00031-9??2015~2026 Costco Wh...
+
+Checking tabs...
+
+--- Image Analysis ---
+Total img tags: 41
+Image: /medias/sys_master/images/hf7/h58/224528602857502.... | Parent: picture None
+Image: /medias/sys_master/images/hf7/h58/224528602857502.... | Parent: picture None
+Image: /medias/sys_master/images/ha8/hdd/224528604364830.... | Parent: picture None
+Image: https://www.costco.com.tw/medias/sys_master/hd2/h1... | Parent: i ['footerIcon1']
+Image: https://www.costco.com.tw/medias/sys_master/hca/h3... | Parent: i ['footerIcon1']
+Image: https://www.costco.com.tw/medias/sys_master/h72/h1... | Parent: i ['footerIcon1']
+Image: https://www.costco.com.tw/medias/sys_master/hfb/h4... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/h35/h5... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/h4a/h6... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/hba/h3... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/ha2/h3... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/hca/h3... | Parent: i ['footerIcon1']
+Image: https://www.costco.com.tw/medias/sys_master/h72/h1... | Parent: i ['footerIcon1']
+Image: https://www.costco.com.tw/medias/sys_master/hfb/h4... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/h35/h5... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/h4a/h6... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/hba/h3... | Parent: i ['footerIcon2']
+Image: https://www.costco.com.tw/medias/sys_master/ha2/h3... | Parent: i ['footerIcon2']
