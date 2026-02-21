@@ -10,6 +10,7 @@ class Product:
     stock_status: str     # "In Stock", "Out of Stock", "Unknown"
     images: List[str]     # List of image URLs
     product_url: str
+    category: Optional[str] = None
     description: Optional[str] = None
     specifications: Optional[str] = None
     is_online_exclusive: bool = False

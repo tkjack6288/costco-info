@@ -202,6 +202,14 @@ class CostcoCrawler:
                  specs_elem = soup.select_one('.product-classifications') or soup.select_one('#specifications')
                  specifications = specs_elem.get_text(separator='\n', strip=True) if specs_elem else None
 
+            # Category (Breadcrumb)
+            category = None
+            breadcrumb_ol = soup.select_one('ol.breadcrumb')
+            if breadcrumb_ol:
+                cats = [a.get_text(strip=True) for a in breadcrumb_ol.select('a') if a.get_text(strip=True)]
+                if cats:
+                    category = " > ".join(cats)
+
             # Exclusive Flags
             is_online_exclusive = bool(soup.select_one('.online-exclusive-icon') or "Online Exclusive" in soup.get_text())
             is_warehouse_exclusive = bool(soup.select_one('img[src*="decal_WHS2"]'))
@@ -249,6 +257,7 @@ class CostcoCrawler:
                 stock_status=basic_info['stock_status'],
                 images=images,
                 product_url=url,
+                category=category,
                 description=description,
                 specifications=specifications,
                 is_online_exclusive=is_online_exclusive,
