@@ -1,0 +1,20 @@
+# 本地開發與版控器
+.git
+.gitignore
+.venv
+
+# Python 快取與編譯檔
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 機密檔案 (確保不會被打包上雲端)
+service-account.json
+.env
+
+# 測試與除錯檔案
+debug_*
+*_err.txt
+*_output.txt
+detail_analysis.txt
+tests/
