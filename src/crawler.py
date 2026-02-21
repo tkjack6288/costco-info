@@ -1,25 +1,44 @@
-import requests
-from bs4 import BeautifulSoup
-import logging
-import time
-import requests
-from bs4 import BeautifulSoup
 import logging
 import time
 from typing import List, Optional, Dict, Iterable
 from src.models import Product
+from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page
+from bs4 import BeautifulSoup
+import re
 
 logger = logging.getLogger(__name__)
 
 class CostcoCrawler:
     BASE_URL = "https://www.costco.com.tw"
     
-    def __init__(self, user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"):
-        self.session = requests.Session()
-        self.session.headers.update({
-            "User-Agent": user_agent,
-            "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-        })
+    def __init__(self, user_agent: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"):
+        self.user_agent = user_agent
+        self.playwright = None
+        self.browser: Optional[Browser] = None
+        self.context: Optional[BrowserContext] = None
+        self.page: Optional[Page] = None
+
+    def _start_browser(self):
+        """啟動 Playwright 瀏覽器並建立全域分頁"""
+        if not self.playwright:
+            self.playwright = sync_playwright().start()
+            self.browser = self.playwright.chromium.launch(headless=True)
+            self.context = self.browser.new_context(
+                user_agent=self.user_agent,
+                viewport={"width": 1280, "height": 800}
+            )
+            # 將分頁建立在此 Context 內，以共用 Cookie
+            self.page = self.context.new_page()
+
+    def _close_browser(self):
+        """關閉瀏覽器與 Playwright"""
+        if self.context:
+            self.context.close()
+        if self.browser:
+            self.browser.close()
+        if self.playwright:
+            self.playwright.stop()
+            self.playwright = None
 
     def crawl_all_products(self) -> Iterable[Product]:
         """
@@ -27,11 +46,11 @@ class CostcoCrawler:
         以產生器 (Generator) 方式逐一回傳商品，以便即時處理。
         """
         logger.info(f"開始從 {self.BASE_URL} 進行完整爬取")
+        self._start_browser()
         
         try:
-            response = self.session.get(self.BASE_URL, timeout=30)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
+            self.page.goto(self.BASE_URL, wait_until="domcontentloaded")
+            soup = BeautifulSoup(self.page.content(), 'html.parser')
             
             # 尋找所有分類連結
             category_links = set()
@@ -54,6 +73,8 @@ class CostcoCrawler:
                 
         except Exception as e:
             logger.error(f"完整爬取期間發生錯誤: {e}")
+        finally:
+            self._close_browser()
 
     def crawl_category(self, category_url: str) -> Iterable[Product]:
         """
@@ -95,13 +116,19 @@ class CostcoCrawler:
         """
         logger.info(f"正在從以下網址擷取商品: {page_url}")
         try:
-            response = self.session.get(page_url, timeout=30)
-            response.raise_for_status()
-        except requests.RequestException as e:
+            # 前往分類頁並等待商品列表出現
+            self.page.goto(page_url, wait_until="domcontentloaded")
+            try:
+                self.page.wait_for_selector('.product-item, sip-product-list-item', timeout=10000)
+            except Exception:
+                logger.warning("等待商品列表(product-item)超時，可能無商品或頁面結構不同")
+                pass
+
+        except Exception as e:
             logger.error(f"擷取 {page_url} 失敗: {e}")
             return []
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(self.page.content(), 'html.parser')
         products = []
 
         product_items = soup.select('.product-item') or soup.select('sip-product-list-item')
@@ -172,12 +199,14 @@ class CostcoCrawler:
         logger.info(f"正在讀取商品詳細頁面: {basic_info['name']} ({url})")
         
         try:
-            response = self.session.get(url + "?lang=zh_TW", timeout=30)
-            if response.status_code != 200:
-                logger.warning(f"Failed to load detail page: {response.status_code}")
-                return None
-                
-            soup = BeautifulSoup(response.text, 'html.parser')
+            # 使用 Playwright 前往詳細頁面，等待重要資訊區塊
+            self.page.goto(url, wait_until="domcontentloaded")
+            try:
+                self.page.wait_for_selector('.product-details-content-wrapper, #product_details', timeout=15000)
+            except Exception:
+                logger.warning("等待商品詳細內容超時，仍嘗試拮取已下載內容")
+
+            soup = BeautifulSoup(self.page.content(), 'html.parser')
 
             # Description
             # Based on analysis: .product-details-content-wrapper seems to hold the main text
