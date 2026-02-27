@@ -169,6 +169,15 @@ class CostcoCrawler:
             # Example: "$799$213.00 / 1包" -> "799"
             price_elem = item.select_one('.product-price') or item.select_one('.price-panel')
             price_text = price_elem.get_text(strip=True) if price_elem else None
+            
+            if not price_text:
+                # 針對部分沒有特定 class 的價格標籤: <span class="notranslate ng-star-inserted">$509</span>
+                for span in item.select('span.notranslate.ng-star-inserted'):
+                    # 避免抓到非價格文字，確保裡面有 $
+                    if '$' in span.get_text():
+                        price_text = span.get_text(strip=True)
+                        break
+
             price = None
             if price_text:
                 import re

@@ -1,71 +1,44 @@
-import logging
+import requests
+from bs4 import BeautifulSoup
 import sys
-# Force UTF-8
+
+# Force UTF-8 output
 sys.stdout.reconfigure(encoding='utf-8')
 
-from src.crawler import CostcoCrawler
-import json
+url = "https://www.costco.com.tw/Health-Beauty/Supplements/Multi-Letter-Vitamins/Centrum-Advance-Women-200-Tablets/p/976579"
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+}
 
-logging.basicConfig(level=logging.INFO)
+response = requests.get(url, headers=headers)
+soup = BeautifulSoup(response.text, 'html.parser')
 
-def main():
-    crawler = CostcoCrawler()
-    
-    # Manually fetch one item
-    # Since fetch_products returns a generator or list, we can just use internal methods for control
-    
-    # 1. Get List Page
-    url = "https://www.costco.com.tw/c/hot-buys"
-    import requests
-    from bs4 import BeautifulSoup
-    
-    headers = {
-         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
-    print(f"Fetching {url}...")
-    resp = requests.get(url, headers=headers)
-    soup = BeautifulSoup(resp.text, 'html.parser')
-    
-    # Find a product with a complex price if possible, or just the first one
-    items = soup.select('.product-item') or soup.select('sip-product-list-item')
-    
-    if items:
-        print(f"Found {len(items)} items. Scanning for a good candidate (e.g., Muffin)...")
-        
-        target_item = None
-        for item in items:
-            text = item.get_text()
-            if "馬芬" in text or "Muffin" in text or "$" in text:
-                target_item = item
-                if "馬芬" in text: break # Prioritize Muffin as per user example
-        
-        if not target_item:
-            print("No specific candidate found, using the second item if available...")
-            target_item = items[1] if len(items) > 1 else items[0]
+print("--- Category ---")
+breadcrumb = soup.select_one('ol.breadcrumb')
+if breadcrumb:
+    print("Found ol.breadcrumb:", [a.get_text(strip=True) for a in breadcrumb.select('a')])
+else:
+    print("Not found ol.breadcrumb")
 
-        # Parse Basic
-        basic = crawler._parse_basic_info(target_item)
-        if basic:
-            print(f"Basic Info: {basic['name']}")
-            print(f"Raw Price Parsed: {basic['price']}")
-            
-            # Parse Detail
-            print("Fetching details...")
-            product = crawler._fetch_product_details(basic)
-            
-            if product:
-                print("\n=== Final Product Data ===")
-                print(f"Name: {product.name}")
-                print(f"Price: {product.price}")
-                print(f"Specs: \n{product.specifications}")
-                print(f"Images: {len(product.images)}")
-                print("==========================")
-            else:
-                print("Failed to fetch details.")
-        else:
-            print("Failed to parse basic info.")
-    else:
-        print("No items found.")
+print("--- Description ---")
+desc = soup.select_one('.product-details-content-wrapper') or soup.select_one('#product_details')
+if desc:
+    print("Found description length:", len(desc.get_text(separator='\n', strip=True)))
+else:
+    print("Not found description")
 
-if __name__ == '__main__':
-    main()
+print("--- Specs ---")
+specs = soup.select_one('sip-product-classification table') or soup.select_one('#product_specs')
+if specs:
+    print("Found specs length:", len(specs.get_text(separator='\n', strip=True)))
+else:
+    print("Not found specs")
+
+# Let's search for keywords to see if they are in JSON
+print("--- Raw Search ---")
+if "克補" in response.text:
+    print("Found product name in raw HTML")
+else:
+    print("Product name NOT in raw HTML")
+
